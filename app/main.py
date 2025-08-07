@@ -13,6 +13,13 @@ app = FastAPI(
     description="API de assistente de vendas para o e-commerce Petlove.",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/api/question-and-answer", response_model=AnswerResponse, status_code=status.HTTP_200_OK)
 async def question_and_answer(payload: QuestionRequest):
@@ -23,7 +30,10 @@ async def question_and_answer(payload: QuestionRequest):
                 {
                     "role": "system",
                     "content": (
-                        "Você é um assistente de vendas da Petlove. Responda de forma clara e completa o que for perguntado. "
+                        "Você é um assistente de vendas da Petlove. "
+                        "Forneça respostas objetivas, empáticas e recheadas "
+                        "de informações veterinárias confiáveis sobre produtos pet. "
+                        "Cite sempre 3 opções de produtos relevantes da Petlove."
                     ),
                 },
                 {"role": "user", "content": payload.question},
